@@ -9,9 +9,13 @@ public class Player : MonoBehaviour{
     public float speed;
 
     Rigidbody2D rigid;
+    SpriteRenderer spriter;
+    Animator anim;
 
     private void Start() {
         rigid = GetComponent<Rigidbody2D>();
+        spriter = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
     }
 
 
@@ -24,4 +28,16 @@ public class Player : MonoBehaviour{
     void OnMove(InputValue value) {
         inputVec = value.Get<Vector2>();
     }
+
+    private void LateUpdate() {
+        anim.SetFloat("Speed", inputVec.magnitude);
+        //magnitude = 벡터의 길이만
+
+        if (inputVec.x != 0) {
+            spriter.flipX = inputVec.x < 0; // inputVec.x < 0의 결과가 입력
+        }
+
+    }
+
+
 }
