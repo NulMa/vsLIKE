@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     private void Awake() {
         rigid = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
+        
     }
 
     // Update is called once per frame
@@ -37,5 +38,11 @@ public class Enemy : MonoBehaviour
             return;
 
         spriter.flipX = target.position.x < rigid.position.x;
+    }
+
+
+    //ÇÁ¸®ÆÕ Å¸°Ù ÀÚµ¿ ÇÒ´ç
+    private void OnEnable() {
+        target = GameManager.instance.player.GetComponent<Rigidbody2D>();
     }
 }
