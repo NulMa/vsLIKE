@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
-{
+public class Spawner : MonoBehaviour{
     public Transform[] spawnPoint;
+    public SpawnData[] spawnData ;
 
+    int level;
     float timer;
 
     private void Awake() {
@@ -15,8 +16,9 @@ public class Spawner : MonoBehaviour
     void Update() {
 
         timer += Time.deltaTime;
+        level = Mathf.Min(Mathf.FloorToInt(GameManager.instance.gameTime / 10f), spawnData.Length - 1) ;
 
-        if (timer > 0.2f) {
+        if (timer > spawnData[level].spawnTime) {
             timer = 0;
             Spawn();
             
@@ -26,11 +28,22 @@ public class Spawner : MonoBehaviour
 
 
     void Spawn() {
-        GameObject ememy = GameManager.instance.pool.Get(Random.Range(0, 2));
+        GameObject enemy = GameManager.instance.pool.Get(0);
 
         //자기 자신의 위치도 포함이기 때문에 랜덤 레인지는 1부터 시작
-        ememy.transform.position = spawnPoint[Random.Range(1, spawnPoint.Length)].position;
+        enemy.transform.position = spawnPoint[Random.Range(1, spawnPoint.Length)].position;
+        enemy.GetComponent<Enemy>().Init(spawnData[level]);
     }
 
+
+}
+
+//직렬화 해서 인스펙터 창에서 확인 가능
+[System.Serializable]
+public class SpawnData {
+    public float spawnTime;
+    public int spriteType;
+    public int health;
+    public float speed;
 
 }
